@@ -17,6 +17,7 @@ import type { ImagePickerAsset } from "expo-image-picker";
 import UploadScreen from "./UploadScreen";
 import { useNetInfo } from "@react-native-community/netinfo";
 import useAuthContext from "../hooks/useAuthContext";
+import { ScrollView } from "react-native-gesture-handler";
 
 export type FormValuesType = {
   title: string;
@@ -94,7 +95,7 @@ const validationSchema = Yup.object().shape({
 const ListingEditScreen = () => {
   const [uploadVisible, setUploadVisible] = useState(false);
   const [progress, setProgress] = useState(0);
-  const { isConnected, isInternetReachable } = useNetInfo();
+  const { isInternetReachable } = useNetInfo();
   const authContext = useAuthContext();
 
   const location = useLocation();
@@ -116,51 +117,53 @@ const ListingEditScreen = () => {
 
   return (
     <Screen style={{}}>
-      <UploadScreen
-        onDone={() => setUploadVisible(false)}
-        progress={progress}
-        visible={uploadVisible}
-      />
-      <AppForm
-        initialValues={{
-          title: "",
-          price: "",
-          description: "",
-          category: null,
-          images: [],
-        }}
-        onSubmit={(values, actions) => {
-          handleSubmit(values, actions);
-        }}
-        validationSchema={validationSchema}
-      >
-        <FormImageInput name="images" />
-        <AppFormField maxLength={255} name="title" placeholder="Title" />
-        <AppFormField
-          keyboardType="numeric"
-          maxLength={8}
-          name="price"
-          placeholder="Price"
-          width={120}
+      <ScrollView>
+        <UploadScreen
+          onDone={() => setUploadVisible(false)}
+          progress={progress}
+          visible={uploadVisible}
         />
-        <AppFormPicker
-          items={categories}
-          name="category"
-          placeholder="Category"
-          numberOfColumns={3}
-          width="50%"
-          PickerItemComponent={CategoryPickerItem}
-        />
-        <AppFormField
-          maxLength={255}
-          name="description"
-          placeholder="Description"
-          multiline
-          numberOfLines={3}
-        />
+        <AppForm
+          initialValues={{
+            title: "",
+            price: "",
+            description: "",
+            category: null,
+            images: [],
+          }}
+          onSubmit={(values, actions) => {
+            handleSubmit(values, actions);
+          }}
+          validationSchema={validationSchema}
+        >
+          <FormImageInput name="images" />
+          <AppFormField maxLength={255} name="title" placeholder="Title" />
+          <AppFormField
+            keyboardType="numeric"
+            maxLength={8}
+            name="price"
+            placeholder="Price"
+            width={120}
+          />
+          <AppFormPicker
+            items={categories}
+            name="category"
+            placeholder="Category"
+            numberOfColumns={3}
+            width="50%"
+            PickerItemComponent={CategoryPickerItem}
+          />
+          <AppFormField
+            maxLength={255}
+            name="description"
+            placeholder="Description"
+            multiline
+            numberOfLines={3}
+          />
 
-        <SubmitButton title="Post" />
-      </AppForm>
+          <SubmitButton title="Post" />
+        </AppForm>
+      </ScrollView>
     </Screen>
   );
 };

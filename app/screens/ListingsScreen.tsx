@@ -20,6 +20,7 @@ const ListingsScreen = ({ navigation }: ListingScreenProps) => {
   const [error, setError] = useState<boolean>(false);
   const { user, setUser } = useContext(AuthContext);
   const [loading, setLoading] = useState<boolean>(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const numberOfListings = listings?.filter(
     (item) => item.user.uid === user?.uid
@@ -55,6 +56,10 @@ const ListingsScreen = ({ navigation }: ListingScreenProps) => {
               }
             />
           )}
+          refreshing={refreshing}
+          onRefresh={() => {
+            listingsApi.getListings(setLoading, setError, setListings);
+          }}
         />
       </Screen>
     </>

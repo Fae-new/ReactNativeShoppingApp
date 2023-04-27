@@ -54,6 +54,7 @@ const AccountScreen = ({
           renderItem={({ item }) => (
             <Listitem
               title={item.title}
+              onPress={() => navigation.navigate(item.targetScreen)}
               IconComponent={
                 <Icon
                   name={

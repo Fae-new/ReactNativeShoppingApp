@@ -16,14 +16,14 @@ type message = {
 const initialMessages = [
   {
     id: 1,
-    title: "T1",
-    description: "D1",
+    title: "Buyer1",
+    description: "hey is this still availabe",
     image: require("../assets/placeholder.jpg"),
   },
   {
     id: 2,
-    title: "T2",
-    description: "D2",
+    title: "Buyer2",
+    description: "Can i get this for $1000",
     image: require("../assets/placeholder.jpg"),
   },
 ];
