@@ -1,20 +1,44 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useState, useEffect } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import * as SplashScreen from "expo-splash-screen";
+
+import TabNavigator from "./app/navigation/TabNavigator";
+import AuthNavigator from "./app/navigation/AuthNavigator";
+import navigationTheme from "./app/navigation/navigationTheme";
+import NoInternet from "./app/components/NoInternet";
+import AuthContext, { UserObject } from "./app/api/auth/context";
+import authStorage from "./app/api/auth/authStorage";
+
+SplashScreen.preventAutoHideAsync();
+// useFonts([require('./assets/fonts/ComicSans.ttf', FontAwesome.font)]);
 
 export default function App() {
+  const [user, setUser] = useState<UserObject | undefined>();
+  const [isReady, setIsReady] = useState(false);
+
+  const restoreToken = async () => {
+    const userObject = await authStorage.getUserObject();
+    if (!userObject) return setIsReady(true);
+    setUser(userObject);
+    setIsReady(true);
+  };
+  useEffect(() => {
+    restoreToken();
+  }, []);
+
+  if (isReady) {
+    SplashScreen.hideAsync();
+  }
+  if (!isReady) {
+    return null;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <AuthContext.Provider value={{ user, setUser }}>
+      <NavigationContainer theme={navigationTheme}>
+        <NoInternet />
+        {user === undefined ? <AuthNavigator /> : <TabNavigator />}
+      </NavigationContainer>
+    </AuthContext.Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

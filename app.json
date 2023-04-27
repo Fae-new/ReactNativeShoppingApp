@@ -1,15 +1,16 @@
 {
   "expo": {
-    "name": "DoneWithIt2",
-    "slug": "DoneWithIt2",
+    "name": "MyDoneWithIt2",
+    "slug": "MyDoneWithIt2",
     "version": "1.0.0",
+    "privacy": "unlisted",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./app/assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./app/assets/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#e63c4b"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -19,12 +20,17 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.faluyiaji.MyDoneWithIt2"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "fbbb76ed-a43e-4224-875a-71eb108a27b9"
+      }
     }
   }
 }
