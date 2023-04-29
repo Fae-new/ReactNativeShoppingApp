@@ -10,8 +10,8 @@ import AppText from "./AppText";
 interface CardProps {
   title: string;
   imageUrl: string;
-  subTitle: string;
-  onPress: () => void;
+  subTitle?: string;
+  onPress?: () => void;
 }
 
 const Card = ({ title, imageUrl, subTitle, onPress }: CardProps) => {

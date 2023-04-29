@@ -17,7 +17,7 @@ const initialMessages = [
   {
     id: 1,
     title: "Buyer1",
-    description: "hey is this still availabe",
+    description: "hey is this still available",
     image: require("../assets/placeholder.jpg"),
   },
   {

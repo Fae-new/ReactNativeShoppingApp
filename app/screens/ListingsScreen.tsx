@@ -12,19 +12,12 @@ import Screen from "../components/Screen";
 type ListingScreenProps = StackScreenProps<feedStackParamList, "Listings">;
 
 import { ListingsType } from "../api/listingsApi2";
-import useAuthContext from "../hooks/useAuthContext";
-import AuthContext from "../api/auth/context";
 
 const ListingsScreen = ({ navigation }: ListingScreenProps) => {
   const [listings, setListings] = useState<ListingsType>();
   const [error, setError] = useState<boolean>(false);
-  const { user, setUser } = useContext(AuthContext);
   const [loading, setLoading] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState(false);
-
-  const numberOfListings = listings?.filter(
-    (item) => item.user.uid === user?.uid
-  ).length;
 
   setTimeout(() => {
     if (listings?.length === 0) {
@@ -48,12 +41,7 @@ const ListingsScreen = ({ navigation }: ListingScreenProps) => {
               title={item.title}
               imageUrl={item.imageDownloadUrl}
               subTitle={"$" + item.price}
-              onPress={() =>
-                navigation.navigate("ListingDetails", {
-                  ...item,
-                  numberOfListings,
-                })
-              }
+              onPress={() => navigation.navigate("ListingDetails", item)}
             />
           )}
           refreshing={refreshing}

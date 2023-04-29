@@ -117,7 +117,7 @@ const ListingEditScreen = () => {
 
   return (
     <Screen style={{}}>
-      <ScrollView>
+      <ScrollView style={{ paddingTop: 10 }}>
         <UploadScreen
           onDone={() => setUploadVisible(false)}
           progress={progress}

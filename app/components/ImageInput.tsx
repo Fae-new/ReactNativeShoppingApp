@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { useFormikContext } from "formik";
 
@@ -10,12 +9,8 @@ import {
   Alert,
   View,
   ScrollView,
-  Animated,
 } from "react-native";
 
-import colors from "../config/colors";
-import Icon from "./Icon";
-import Error from "./Error";
 import SelectImage from "./SelectImage";
 import { FormValuesType } from "../screens/AddListingScreen";
 
@@ -23,8 +18,7 @@ const ImageInput = ({ name }: { name: string }) => {
   // const [images, setImages] = useState<ImagePicker.ImagePickerAsset[]>([]);
 
   const scrollView = useRef<ScrollView>(null);
-  const { setFieldValue, touched, errors, values } =
-    useFormikContext<FormValuesType>();
+  const { setFieldValue, values } = useFormikContext<FormValuesType>();
   const imageAssets = values[
     name as keyof FormValuesType
   ] as ImagePicker.ImagePickerAsset[];

@@ -1,5 +1,6 @@
 import { uploadBytesResumable,ref,getDownloadURL } from "firebase/storage"
-import { addDoc,collection ,getDocs} from "firebase/firestore"
+import { addDoc,collection ,getDocs,doc,updateDoc} from "firebase/firestore"
+
 
 
 import { storage } from "../config/firebase"
@@ -39,7 +40,7 @@ const uploadImage=async (values:FormValuesType,onUploadProgress: React.Dispatch<
   
   for await(let image of values.images){
  
-    const storageRef = ref(storage, `listingImages/${  image.assetId? image.assetId:image.height+''+image.width}.jpg`)  
+    const storageRef = ref(storage, `listingImages/${image.height+''+image.uri}.jpg`)  
     
       
         const response = await fetch(image.uri)
@@ -58,17 +59,19 @@ const uploadImage=async (values:FormValuesType,onUploadProgress: React.Dispatch<
 
   const uploadDetails=async(values:FormValuesType,authContext:ContextObjectType|undefined)=>{
 
+if(authContext?.setUser&&authContext.user)authContext?.setUser({...authContext.user,numberOfListings:authContext.user.numberOfListings+1})
+
 try {
     
     const imagesUriArray:string[]=[]
     
         for await (let image of values.images){
         
-        image.assetId?imagesUriArray.push( image.assetId):imagesUriArray.push(image.height+''+image.width)
+        image.assetId?imagesUriArray.push( image.assetId):imagesUriArray.push(image.height+image.uri)
     
         }
-        
-          
+        const usernamesCollectionRef = collection(db, "usernames");
+       await updateDoc(doc(usernamesCollectionRef,authContext?.user?.uid),{numberOfListings:authContext?.user?.numberOfListings as number +1})
           await addDoc(collection(db, "listings"), {
             title: values.title,
             price: values.price,
@@ -77,6 +80,7 @@ try {
             user:authContext?.user
             
           });
+
 } catch (error) {
     console.log(error)
     

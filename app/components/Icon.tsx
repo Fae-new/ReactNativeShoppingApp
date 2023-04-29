@@ -4,9 +4,9 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 interface iconProps {
   name: keyof typeof MaterialCommunityIcons.glyphMap;
-  size: number;
+  size?: number;
   backgroundColor?: string;
-  iconColor: string;
+  iconColor?: string;
 }
 
 const Icon = ({

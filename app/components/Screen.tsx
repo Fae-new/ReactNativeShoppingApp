@@ -8,9 +8,7 @@ const Screen = ({
   style: {};
 }) => {
   return (
-    <SafeAreaView style={{ ...styles.container, ...style }}>
-      {children}
-    </SafeAreaView>
+    <SafeAreaView style={[styles.container, style]}>{children}</SafeAreaView>
   );
 };
 

@@ -1,7 +1,7 @@
 
 import { initializeApp } from "firebase/app";
-import {getAuth,GoogleAuthProvider,createUserWithEmailAndPassword,signInWithPopup,signInWithEmailAndPassword,signOut} from 'firebase/auth'
-import {getFirestore, initializeFirestore} from 'firebase/firestore'
+import {getAuth,GoogleAuthProvider} from 'firebase/auth'
+import {initializeFirestore} from 'firebase/firestore'
 import {getStorage} from 'firebase/storage'
 
 

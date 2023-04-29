@@ -10,7 +10,6 @@ import AuthContext, { UserObject } from "./app/api/auth/context";
 import authStorage from "./app/api/auth/authStorage";
 
 SplashScreen.preventAutoHideAsync();
-// useFonts([require('./assets/fonts/ComicSans.ttf', FontAwesome.font)]);
 
 export default function App() {
   const [user, setUser] = useState<UserObject | undefined>();
@@ -27,7 +26,7 @@ export default function App() {
   }, []);
 
   if (isReady) {
-    SplashScreen.hideAsync();
+    // SplashScreen.hideAsync();
   }
   if (!isReady) {
     return null;

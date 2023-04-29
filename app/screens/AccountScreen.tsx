@@ -1,4 +1,3 @@
-import React, { useContext } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -12,6 +11,8 @@ import { accountStackParamList } from "../navigation/AccountNavigator";
 import { signOut } from "firebase/auth";
 import { auth } from "../config/firebase";
 import authStorage from "../api/auth/authStorage";
+import useAuthContext from "../hooks/useAuthContext";
+import { useContext } from "react";
 import AuthContext from "../api/auth/context";
 
 const menuItems = [
@@ -30,19 +31,19 @@ const menuItems = [
 const AccountScreen = ({
   navigation,
 }: StackScreenProps<accountStackParamList, "Account">) => {
-  const { user, setUser } = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
 
-  const handleLogout = () => {
-    if (setUser) setUser(undefined);
+  const handleLogout = async () => {
+    await authStorage.removeUserObject();
+    authContext?.setUser(() => undefined);
     signOut(auth);
-    authStorage.removeUserObject();
   };
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
         <Listitem
-          title={user?.userName as string}
-          subtitle={user?.email as string}
+          title={authContext?.user?.userName as string}
+          subtitle={authContext?.user?.email as string}
           image={require("../assets/placeholder.jpg")}
         />
       </View>
@@ -54,7 +55,11 @@ const AccountScreen = ({
           renderItem={({ item }) => (
             <Listitem
               title={item.title}
-              onPress={() => navigation.navigate(item.targetScreen)}
+              onPress={() =>
+                navigation.navigate(
+                  item.targetScreen as keyof accountStackParamList
+                )
+              }
               IconComponent={
                 <Icon
                   name={
@@ -73,7 +78,9 @@ const AccountScreen = ({
       <Listitem
         title="Log out"
         IconComponent={<Icon name="logout" backgroundColor="#ffe66d" />}
-        onPress={handleLogout}
+        onPress={() => {
+          if (authContext?.setUser) handleLogout();
+        }}
       />
     </Screen>
   );

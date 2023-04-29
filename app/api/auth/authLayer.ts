@@ -6,6 +6,7 @@ import authStorage from "./authStorage";
 
 
 
+
   export type AuthInfoType = {
     name?:string
     email: string;
@@ -32,10 +33,10 @@ if (type==='login'){
   const user = response.user;
   const docRef = doc(db, "usernames", user.uid);
   const   docSnap=await getDoc(docRef)
-  const userName=docSnap.data()?.username
+ 
 
-  authStorage.storeUserObject({userName:userName,email:user.email,uid:user.uid,})
-  if(setUser) setUser({userName:userName,email:user.email,uid:user.uid})
+  authStorage.storeUserObject({userName:docSnap.data()?.username,email:user.email,uid:user.uid,numberOfListings:docSnap.data()?.numberOfListings})
+  if(setUser) setUser({userName:docSnap.data()?.username,email:user.email,uid:user.uid,numberOfListings:docSnap.data()?.numberOfListings})
 
 }
 else{
@@ -44,10 +45,10 @@ else{
      authInfo.email,
      authInfo.password)
      const user = response.user;
-    await setDoc(doc(usernamesCollectionRef,user.uid),{uid:user.uid,username:authInfo.name})
-     authStorage.storeUserObject({email:user.email,uid:user.uid,userName:authInfo.name})
+    await setDoc(doc(usernamesCollectionRef,user.uid),{uid:user.uid,username:authInfo.name,numberOfListings:0})
+     authStorage.storeUserObject({email:user.email,uid:user.uid,userName:authInfo.name,numberOfListings:0})
  
-     if(setUser) setUser({email:user.email,uid:user.uid,userName:authInfo.name})
+     if(setUser) setUser({email:user.email,uid:user.uid,userName:authInfo.name,numberOfListings:0})
 
 }
 
@@ -67,5 +68,7 @@ setLoading(false)
     }
 
 }
+
+
 
 export default {authenticate}

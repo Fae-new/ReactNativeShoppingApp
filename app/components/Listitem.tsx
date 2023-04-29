@@ -12,7 +12,7 @@ import AppText from "./AppText";
 
 interface CardProps {
   title: string;
-  image: number;
+  image?: number;
   IconComponent?: React.ReactNode;
   subtitle?: string;
   onPress?: () => void;

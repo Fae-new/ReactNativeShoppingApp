@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+
 import {
   View,
   StyleSheet,
@@ -5,6 +8,8 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Keyboard,
+  Text,
+  Alert,
 } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 
@@ -14,14 +19,30 @@ import colors from "../config/colors";
 import { feedStackParamList } from "../navigation/FeedStackNavigator";
 import CustomButton from "../components/CustomButton";
 import AppTextInput from "../components/AppTextInput";
+import { db } from "../config/firebase";
+import ActivityIndicator2 from "../components/ActivityIndicator2";
+
+type sellerInfo = {
+  numberOfListings: number;
+  uid: string;
+  username: string;
+};
 
 const ListingDetails = ({
   route,
 }: StackScreenProps<feedStackParamList, "ListingDetails">) => {
-  let numberOfListings = route.params.numberOfListings + " listings";
-  if (route.params.numberOfListings === 1) {
-    numberOfListings = "1 listing";
-  }
+  const [sellerInfo, setSellerInfo] = useState<sellerInfo>();
+  const [message, setMessage] = useState("");
+
+  const getSeller = async () => {
+    const docRef = doc(db, "usernames", route.params.user.uid);
+    const docSnap = await getDoc(docRef);
+    setSellerInfo(docSnap.data() as sellerInfo);
+  };
+
+  useEffect(() => {
+    getSeller();
+  }, []);
 
   return (
     <ScrollView>
@@ -36,18 +57,41 @@ const ListingDetails = ({
           <AppText> {route.params.description} </AppText>
         </View>
 
-        <Listitem
-          title={route.params.user.userName as string}
-          subtitle={numberOfListings}
-          image={require("../assets/placeholder.jpg")}
-        />
-
+        {sellerInfo ? (
+          <>
+            <Text style={{ fontSize: 20, paddingTop: 30 }}> Vendor Info</Text>
+            <Listitem
+              title={sellerInfo?.username as string}
+              subtitle={
+                sellerInfo?.numberOfListings.toString() +
+                (sellerInfo?.numberOfListings === 1 ? " listing" : " listings")
+              }
+              image={require("../assets/placeholder.jpg")}
+            />
+          </>
+        ) : (
+          <>
+            <ActivityIndicator2 height={100} />
+            <Text style={{ textAlign: "center", color: colors.primary }}>
+              Loading Vendor info...
+            </Text>
+          </>
+        )}
         <View style={{ padding: 20 }}>
-          <AppTextInput placeholder="Message..." onChangeText={() => {}} />
+          <AppTextInput
+            placeholder="Message..."
+            onChangeText={(text) => {
+              setMessage(text);
+            }}
+          />
           <CustomButton
             title="CONTACT SELLER"
             onPress={() => {
               Keyboard.dismiss();
+              Alert.alert(
+                "Message sent",
+                `Message delivered to ${sellerInfo?.username} to buy ${route.params.title} `
+              );
             }}
           />
         </View>
